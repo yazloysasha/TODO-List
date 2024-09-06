@@ -1,0 +1,209 @@
+@import "@styles/icons.module.scss";
+@import "@styles/colors.module.scss";
+
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 48px;
+  border-radius: 8px;
+  margin: 5px 0;
+  background-color: $white10;
+  color: $white50;
+
+  p {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px;
+  }
+}
+
+.tasks {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 5px 0;
+
+  &.grabbing {
+    margin-bottom: 100px;
+  }
+
+  .task {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    min-height: 100px;
+    margin: 5px 0;
+    border-radius: 8px;
+    background-color: $gray;
+    transition: filter 0.3s;
+
+    &.grabbing {
+      transition: transform 0.3s;
+    }
+
+    &:active {
+      filter: brightness(80%);
+      transition: filter 0.3s;
+    }
+
+    .number {
+      p {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
+        margin: 10px;
+        padding: 0 8px;
+        width: max-content;
+        min-width: 36px;
+        height: 36px;
+        border-radius: 6px;
+        background: $gradientAccent;
+      }
+    }
+
+    .status {
+      %badge {
+        font-size: 16px;
+        font-weight: 500;
+        padding: 4px 8px;
+        border-radius: 12px;
+        width: max-content;
+        margin: 10px;
+      }
+
+      .done {
+        @extend %badge;
+
+        color: $success;
+        background-color: rgba(63, 166, 67, 0.25);
+      }
+
+      .notDone {
+        @extend %badge;
+
+        color: $error;
+        background-color: rgba(252, 63, 29, 0.25);
+      }
+    }
+
+    .content {
+      display: flex;
+
+      textarea {
+        width: 100%;
+        padding: 7.5px;
+        margin: 10px;
+        resize: none;
+        overflow: hidden;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 12px;
+        background-color: $black70;
+        field-sizing: content;
+
+        &:disabled {
+          filter: brightness(50%);
+        }
+      }
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+
+      button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 12px;
+        width: 40px;
+        height: 40px;
+        margin-top: 10px;
+      }
+
+      .changeStatus {
+        &.done {
+          .icon {
+            @include icon("revision", $lightGray, 24px);
+
+            transform: rotate(180deg);
+          }
+
+          &:hover {
+            .icon {
+              @include icon("revision", $error, 24px);
+            }
+          }
+        }
+
+        &.notDone {
+          .icon {
+            @include icon("checkDouble", $lightGray, 28px);
+          }
+
+          &:hover {
+            .icon {
+              @include icon("checkDouble", $success, 28px);
+            }
+          }
+        }
+      }
+
+      .delete {
+        margin-right: 10px;
+
+        .icon {
+          @include icon("trash", $lightGray, 24px);
+        }
+
+        &:hover {
+          .icon {
+            @include icon("trash", $gray800, 24px);
+          }
+        }
+      }
+    }
+
+    &.animate {
+      %badge {
+        transition: background, color 0.3s;
+      }
+
+      textarea {
+        transition: filter 0.3s;
+      }
+
+      .icon {
+        transition: background 0.3s;
+      }
+    }
+  }
+}
+
+.number {
+  width: 10%;
+}
+.status {
+  width: 20%;
+}
+.content {
+  width: 50%;
+}
+.buttons {
+  width: 20%;
+}
+
+.nothing {
+  margin: 15px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
+  color: $gray800;
+}

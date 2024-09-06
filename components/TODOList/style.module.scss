@@ -1,0 +1,87 @@
+@import "@styles/icons.module.scss";
+@import "@styles/colors.module.scss";
+
+.todoList {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 40px auto;
+
+  .title {
+    font-size: 22px;
+  }
+
+  .todoHead {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .headContainer {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin: 10px 0;
+
+      .info {
+        font-size: 16px;
+        font-weight: 500;
+        margin-right: 30px;
+
+        .done {
+          color: $success;
+        }
+        .notDone {
+          color: $error;
+        }
+
+        color: $lightGray;
+      }
+
+      .buttons {
+        display: flex;
+        flex-direction: row;
+        margin-left: auto;
+
+        .button {
+          padding: 0 16px;
+          margin-left: 10px;
+          border-radius: 12px;
+          height: 44px;
+          font-size: 18px;
+          font-weight: 500;
+
+          .add,
+          .upload,
+          .download {
+            margin-right: 5px;
+          }
+
+          .add {
+            @include icon("plus", $white, 24px);
+          }
+          .upload {
+            @include icon("upload", $white, 24px);
+          }
+          .download {
+            @include icon("outputFile", $white, 24px);
+          }
+        }
+      }
+
+      .search {
+        width: 50%;
+      }
+
+      .dropdown {
+        margin-left: auto;
+      }
+
+      .total {
+        font-size: 16px;
+        font-weight: 500;
+        margin-left: auto;
+        color: $white50;
+      }
+    }
+  }
+}

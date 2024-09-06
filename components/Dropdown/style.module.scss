@@ -1,0 +1,107 @@
+@import "@styles/icons.module.scss";
+@import "@styles/colors.module.scss";
+
+.dropdown {
+  display: flex;
+  flex-direction: row;
+
+  .clean {
+    font-size: 16px;
+    font-weight: 500;
+    margin-right: 30px;
+    visibility: hidden;
+    color: $lightGray;
+    transition: color 0.3s;
+
+    &:hover {
+      color: $white;
+    }
+  }
+
+  .modal {
+    user-select: none;
+
+    %headerHover {
+      color: $lightGray;
+
+      .arrow {
+        @include icon("chevronDown", $lightGray, 24px);
+      }
+    }
+
+    .header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .title {
+        font-size: 16px;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .arrow {
+        @include icon("chevronDown", $white, 24px);
+
+        transition: 0.3s;
+      }
+
+      &:hover {
+        @extend %headerHover;
+      }
+    }
+
+    .options {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      visibility: hidden;
+      border-radius: 10px;
+      background-color: $gray;
+
+      .option {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        min-height: 24px;
+        padding: 16px;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 10px;
+        transition: background 0.3s;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $white20;
+        }
+
+        .check {
+          @include icon("check", $white, 24px);
+
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+
+  &.open {
+    .arrow {
+      transform: rotate(180deg);
+    }
+
+    .header {
+      @extend %headerHover;
+    }
+
+    .options {
+      visibility: unset;
+    }
+  }
+
+  &.chosen {
+    .clean {
+      visibility: unset;
+    }
+  }
+}

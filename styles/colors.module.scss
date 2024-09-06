@@ -1,0 +1,59 @@
+/* Цвета */
+
+$white: #ffffff;
+$white10: #ffffff1a;
+$white20: #ffffff33;
+$white30: #ffffff4d;
+$white50: #ffffff80;
+$black70: rgba(9, 9, 12, 0.7);
+$black: #000000;
+$navyBlack: #09090c; // Цвет приложения по умолчанию
+$gray: #232326;
+$lightGray: #bababa;
+$grayMedium: #4b4b4b;
+$darkGray: #232326;
+$gray800: #8b8a8a;
+$purple: #9747ff;
+$lightPurple: #bc88ff;
+$blue: #72acff;
+$darkBlue: #2674fb;
+$error: rgb(252, 63, 29);
+$success: rgb(63, 166, 67);
+$orange: #e9a04b;
+
+/* Градиенты */
+
+$gradientWhite50: linear-gradient(
+  180deg,
+  rgba(255, 255, 255, 0.1) 0%,
+  rgba(255, 255, 255, 0.13) 50%,
+  rgba(255, 255, 255, 0.1) 100%
+);
+$gradientWhite75: linear-gradient(
+  180deg,
+  rgba(255, 255, 255, 0.2) 0%,
+  rgba(255, 255, 255, 0.26) 50%,
+  rgba(255, 255, 255, 0.2) 100%
+);
+$gradientBlack50: linear-gradient(
+  180deg,
+  rgba(9, 9, 12, 0.1) 0%,
+  rgba(9, 9, 12, 0.13) 50%,
+  rgba(9, 9, 12, 0.1) 100%
+);
+$gradientBanner: radial-gradient(
+  430.07% 73.67% at 4% 50.09%,
+  rgba(128, 0, 255, 0.16) 0%,
+  rgba(133, 79, 249, 0.04) 100%
+);
+$gradientAccent: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%, #2575fc 100%);
+$gradientHover: linear-gradient(90deg, #48078f 0%, #004fd6 100%);
+$gradientVertical: linear-gradient(135deg, #5712b1 0%, #2b6cfa 100%);
+$gradient2: linear-gradient(135deg, #c179ff 0%, #63b5ff 100%, #63b5ff 100%);
+$gradientBlocked: linear-gradient(
+    0deg,
+    rgba(9, 9, 12, 0.6) 0%,
+    rgba(9, 9, 12, 0.6) 100%
+  ),
+  linear-gradient(90deg, #48078f 0%, #004fd6 100%);
+$gradientCircle: radial-gradient(circle, #808080, #d3d3d3);
