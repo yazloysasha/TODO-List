@@ -8,7 +8,7 @@ export default function App({ Component, pageProps }: AppProps): ReactNode {
   return (
     <>
       <Head>
-        <link rel="icon" href="gte.png" type="image/png" />
+        <link rel="icon" href="logo.png" type="image/png" />
       </Head>
 
       <MainLayout>

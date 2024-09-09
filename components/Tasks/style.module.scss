@@ -207,3 +207,97 @@
   font-weight: 500;
   color: $gray800;
 }
+
+@media (max-width: 760px) {
+  .title {
+    .number {
+      width: 25%;
+    }
+    .status {
+      width: 30%;
+    }
+    .content {
+      display: none;
+    }
+  }
+
+  .tasks {
+    .task {
+      .number {
+        width: 25%;
+      }
+      .status {
+        width: 30%;
+      }
+      .buttons {
+        width: 35%;
+      }
+      .content {
+        width: 100%;
+      }
+
+      .number {
+        order: 1;
+      }
+      .status {
+        order: 2;
+      }
+      .buttons {
+        order: 3;
+        margin-left: auto;
+
+        button {
+          margin-top: 0;
+        }
+
+        .delete {
+          margin-right: 0;
+        }
+      }
+      .content {
+        order: 4;
+        min-height: 100px;
+      }
+    }
+  }
+}
+@media (max-width: 320px) {
+  .title {
+    .number {
+      width: 100%;
+    }
+    .status {
+      display: none;
+    }
+    .content {
+      display: none;
+    }
+  }
+
+  .tasks {
+    .task {
+      .number,
+      .buttons {
+        width: 50%;
+      }
+
+      .number {
+        order: 1;
+      }
+      .buttons {
+        order: 2;
+      }
+      .status {
+        order: 3;
+
+        %badge {
+          margin-top: 0;
+          margin-bottom: 0;
+        }
+      }
+      .content {
+        order: 4;
+      }
+    }
+  }
+}

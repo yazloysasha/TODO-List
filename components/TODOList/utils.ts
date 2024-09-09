@@ -1,7 +1,7 @@
 import { ITask, Status } from "./types";
 
 export const getRegExpQuery = (query: string = ""): RegExp => {
-  return new RegExp(query, "gi");
+  return new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
 };
 
 export const getCountOfTasksByStatuses = (
