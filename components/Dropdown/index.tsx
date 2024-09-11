@@ -46,7 +46,11 @@ export default function Dropdown<T extends string>({
 
         <ul className={style.options} onClick={() => setIsOpen(false)}>
           {Object.keys(options).map((key) => (
-            <li className={style.option} onClick={() => setOption(key as T)}>
+            <li
+              key={key}
+              className={style.option}
+              onClick={() => setOption(key as T)}
+            >
               {options[key as T]}
 
               {key === option && <div className={style.check} />}
