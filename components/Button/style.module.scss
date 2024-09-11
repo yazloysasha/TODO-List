@@ -1,15 +1,30 @@
 @import "@styles/colors.module.scss";
 
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
 %button {
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
   background: transparent;
-  width: unset;
-  height: unset;
   z-index: 0;
+  overflow: hidden;
   cursor: pointer;
+
+  .ripple {
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 600ms linear;
+    background-color: $white50;
+  }
 
   &:disabled,
   &.disabled {
@@ -22,12 +37,16 @@
 
   color: $white;
 
+  @media (hover: none) {
+    &:active {
+      background: $gradientHover;
+    }
+  }
+
   &::before {
     content: "";
     position: absolute;
     border-radius: inherit;
-    top: 0;
-    left: 0;
     height: 100%;
     width: 100%;
     z-index: -1;
@@ -38,25 +57,25 @@
     content: "";
     position: absolute;
     border-radius: inherit;
-    top: 0;
-    left: 0;
     height: 100%;
     width: 100%;
     z-index: -1;
     background: $gradientHover;
-    transition: 0.3s ease-out;
+    transition: opacity 0.3s;
     opacity: 0;
   }
 
-  &:hover {
-    &::after {
-      opacity: 1;
+  @media (hover: hover) {
+    &:hover {
+      &::after {
+        opacity: 1;
+      }
     }
-  }
 
-  &:active {
-    &::after {
-      opacity: 0;
+    &:active {
+      &::after {
+        opacity: 0;
+      }
     }
   }
 
@@ -81,8 +100,6 @@
     content: "";
     position: absolute;
     border-radius: inherit;
-    top: 0;
-    left: 0;
     height: 100%;
     width: 100%;
     z-index: -1;
@@ -93,25 +110,25 @@
     content: "";
     position: absolute;
     border-radius: inherit;
-    top: 0;
-    left: 0;
     height: 100%;
     width: 100%;
     z-index: -1;
     background: $white30;
-    transition: 0.3s ease-out;
+    transition: opacity 0.3s;
     opacity: 0;
   }
 
-  &:hover {
-    &::after {
-      opacity: 1;
+  @media (hover: hover) {
+    &:hover {
+      &::after {
+        opacity: 1;
+      }
     }
-  }
 
-  &:active {
-    &::after {
-      opacity: 0;
+    &:active {
+      &::after {
+        opacity: 0;
+      }
     }
   }
 

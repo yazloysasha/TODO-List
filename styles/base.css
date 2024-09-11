@@ -4,6 +4,7 @@ html {
   overflow-y: scroll;
   background-color: #09090c;
   color: white;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {

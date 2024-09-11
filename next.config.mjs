@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 
+const { DEVICE } = process.env;
+
 const nextConfig = {
-  output: process.env.DEVICE == "web" ? undefined : "export",
+  output: DEVICE == "web" ? undefined : "export",
+  publicRuntimeConfig: {
+    DEVICE,
+  },
 };
 
 export default nextConfig;
