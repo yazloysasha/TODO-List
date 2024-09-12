@@ -1,16 +1,22 @@
+import { IConfig } from "@types";
+import getConfig from "next/config";
 import Tasks from "@components/Tasks";
-import { StatusTitle } from "./consts";
 import style from "./style.module.scss";
 import Button from "@components/Button";
 import Search from "@components/Search";
 import { ITask, Status } from "./types";
+import { Toast } from "@capacitor/toast";
 import Dropdown from "@components/Dropdown";
+import { FILENAME, StatusTitle } from "./consts";
 import { ButtonType } from "@components/Button/types";
 import { ReactNode, useEffect, useState } from "react";
 import { StatusClassName } from "@components/Tasks/consts";
+import { Directory, Filesystem } from "@capacitor/filesystem";
 import { getCountOfTasksByStatuses, getRegExpQuery } from "./utils";
 
 export default function TODOList(): ReactNode {
+  const { DEVICE } = getConfig().publicRuntimeConfig as IConfig;
+
   // Список задач
   const [tasks, setTasks] = useState<ITask[]>([]);
 
@@ -24,37 +30,60 @@ export default function TODOList(): ReactNode {
   const [link, setLink] = useState<HTMLAnchorElement | undefined>();
 
   // Отслеживать добавление файлов
-  const onUploadFile = async (file: File): Promise<void> => {
-    const text = await file.text();
+  const onUploadFile = (file: File): void => {
+    const fileReader = new FileReader();
 
-    try {
-      const data = JSON.parse(text);
-      if (!Array.isArray(data)) return;
+    fileReader.readAsText(file);
+    fileReader.onload = () => {
+      try {
+        const data = JSON.parse(fileReader.result as string);
+        if (!Array.isArray(data)) return;
 
-      for (const element of data) {
-        if (
-          element.content === undefined ||
-          (element.status !== Status.DONE && element.status !== Status.NOT_DONE)
-        )
-          return;
+        for (const element of data) {
+          if (
+            element.content === undefined ||
+            (element.status !== Status.DONE &&
+              element.status !== Status.NOT_DONE)
+          )
+            return;
+        }
+
+        setTasks(data as ITask[]);
+      } catch (err) {
+        console.error(err);
       }
-
-      setTasks(data as ITask[]);
-    } catch (err) {
-      console.error(err);
-    }
+    };
   };
 
   // Отслеживать загрузку файлов
   const onDownloadFile = (): void => {
-    if (!link) return;
-
+    const fileReader = new FileReader();
     const text = JSON.stringify(tasks);
     const blob = new Blob([text]);
-    const url = URL.createObjectURL(blob);
 
-    link.href = url;
-    link.click();
+    fileReader.readAsDataURL(blob);
+
+    fileReader.onload = async (): Promise<void> => {
+      const url = fileReader.result as string;
+
+      switch (DEVICE) {
+        case "web":
+          if (!link) return;
+
+          link.href = url;
+          link.click();
+          break;
+        case "android":
+          await Filesystem.writeFile({
+            path: `Download/${FILENAME}`,
+            data: url,
+            directory: Directory.ExternalStorage,
+          });
+
+          await Toast.show({ text: "Успешно сохранено" });
+          break;
+      }
+    };
   };
 
   // Отслеживать добавление задачи
@@ -120,10 +149,13 @@ export default function TODOList(): ReactNode {
     (task) => query.test(task.content) && (!status || status === task.status)
   );
 
+  // Создать ссылку для скачивания файла
   useEffect(() => {
+    if (DEVICE !== "web") return;
+
     const newLink = document.createElement("a");
 
-    newLink.download = "tasks.json";
+    newLink.download = FILENAME;
 
     setLink(newLink);
   }, []);
@@ -207,7 +239,6 @@ export default function TODOList(): ReactNode {
 
       <Tasks
         tasks={showedTasks}
-        status={status}
         onMoveTask={onMoveTask}
         onChangeTaskContent={onChangeTaskContent}
         onChangeTaskStatus={onChangeTaskStatus}

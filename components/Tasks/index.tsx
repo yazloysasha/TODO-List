@@ -16,14 +16,12 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 export default function Tasks({
   tasks,
-  status,
   onMoveTask,
   onChangeTaskContent,
   onChangeTaskStatus,
   onDeleteTask,
 }: {
   tasks: ITask[];
-  status: Status | undefined;
   onMoveTask: OnMoveTask;
   onChangeTaskContent: OnChangeTaskContent;
   onChangeTaskStatus: OnChangeTaskStatus;
@@ -109,6 +107,7 @@ export default function Tasks({
 
   useEffect(() => setIsClientSide(true), []);
 
+  // Задержка для правильной отрисовки анимации
   useEffect(() => {
     if (isGrabbing) {
       setIsAnimate(false);

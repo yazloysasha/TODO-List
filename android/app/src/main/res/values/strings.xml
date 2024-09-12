@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">TODO List</string>
+    <string name="title_activity_main">TODO List</string>
+    <string name="package_name">ru.tilleria.todo</string>
+    <string name="custom_url_scheme">ru.tilleria.todo</string>
+</resources>
