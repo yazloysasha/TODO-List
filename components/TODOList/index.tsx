@@ -95,10 +95,12 @@ export default function TODOList(): ReactNode {
           break;
         case "android":
           try {
+            await Filesystem.requestPermissions();
+
             await Filesystem.writeFile({
-              path: `TODOList/${FILENAME}`,
+              path: `Download/${FILENAME}`,
               data: url,
-              directory: Directory.Documents,
+              directory: Directory.ExternalStorage,
               recursive: true,
             });
 
