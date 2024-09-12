@@ -93,6 +93,7 @@ export default function TODOList(): ReactNode {
           link.download = FILENAME;
           link.click();
           break;
+
         case "android":
           try {
             await Filesystem.requestPermissions();
@@ -100,7 +101,7 @@ export default function TODOList(): ReactNode {
             await Filesystem.writeFile({
               path: `Download/${FILENAME}`,
               data: url,
-              directory: Directory.ExternalStorage,
+              directory: Directory.External,
               recursive: true,
             });
 
