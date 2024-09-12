@@ -38,15 +38,9 @@
     margin: 5px 0;
     border-radius: 8px;
     background-color: $gray;
-    transition: filter 0.3s;
 
     &.grabbing {
       transition: transform 0.3s;
-    }
-
-    &:active {
-      filter: brightness(80%);
-      transition: filter 0.3s;
     }
 
     .number {
@@ -136,9 +130,11 @@
             transform: rotate(180deg);
           }
 
-          &:hover {
-            .icon {
-              @include icon("revision", $error, 24px);
+          @media (hover: hover) {
+            &:hover {
+              .icon {
+                @include icon("revision", $error, 24px);
+              }
             }
           }
         }
@@ -148,9 +144,11 @@
             @include icon("checkDouble", $lightGray, 28px);
           }
 
-          &:hover {
-            .icon {
-              @include icon("checkDouble", $success, 28px);
+          @media (hover: hover) {
+            &:hover {
+              .icon {
+                @include icon("checkDouble", $success, 28px);
+              }
             }
           }
         }
@@ -163,25 +161,25 @@
           @include icon("trash", $lightGray, 24px);
         }
 
-        &:hover {
-          .icon {
-            @include icon("trash", $gray800, 24px);
+        @media (hover: hover) {
+          &:hover {
+            .icon {
+              @include icon("trash", $gray800, 24px);
+            }
           }
         }
       }
     }
 
     &.animate {
-      %badge {
-        transition: background, color 0.3s;
-      }
-
       textarea {
         transition: filter 0.3s;
       }
 
-      .icon {
-        transition: background 0.3s;
+      @media (hover: hover) {
+        .icon {
+          transition: background 0.3s;
+        }
       }
     }
   }

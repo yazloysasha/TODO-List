@@ -1,8 +1,13 @@
+import {
+  useRef,
+  ReactNode,
+  MouseEventHandler,
+  ChangeEventHandler,
+} from "react";
 import { IConfig } from "@types";
 import getConfig from "next/config";
 import style from "./style.module.scss";
 import { ButtonType, IInputProps } from "./types";
-import { ReactNode, MouseEventHandler, ChangeEventHandler } from "react";
 
 export default function Button({
   className,
@@ -23,6 +28,8 @@ export default function Button({
 }): ReactNode {
   const { DEVICE } = getConfig().publicRuntimeConfig as IConfig;
 
+  const ref = useRef(null); // Ссылка на кнопку
+
   let classNames: string | string[] = [style[type]];
 
   if (className) classNames.push(className);
@@ -32,11 +39,11 @@ export default function Button({
   classNames = classNames.join(" ");
 
   // Создать эффект ряби
-  const createRippleEffect = (
-    element: HTMLButtonElement | HTMLLabelElement,
-    clientX: number,
-    clientY: number
-  ): void => {
+  const createRippleEffect = (clientX: number, clientY: number): void => {
+    if (!ref.current) return;
+
+    const element = ref.current as HTMLButtonElement | HTMLLabelElement;
+
     const circle = document.createElement("div");
     const diameter = Math.max(element.clientWidth, element.clientHeight);
     const radius = diameter / 2;
@@ -59,11 +66,7 @@ export default function Button({
     HTMLButtonElement | HTMLLabelElement
   > = (event) => {
     if (DEVICE === "android") {
-      createRippleEffect(
-        event.target as HTMLButtonElement | HTMLLabelElement,
-        event.clientX,
-        event.clientY
-      );
+      createRippleEffect(event.clientX, event.clientY);
     }
 
     if (onClick) onClick(event);
@@ -71,7 +74,12 @@ export default function Button({
 
   return input ? (
     <>
-      <label className={classNames} htmlFor={input.id} onClick={onClickHandler}>
+      <label
+        ref={ref}
+        className={classNames}
+        htmlFor={input.id}
+        onClick={onClickHandler}
+      >
         {children}
       </label>
       <input
@@ -84,7 +92,12 @@ export default function Button({
       />
     </>
   ) : (
-    <button className={classNames} disabled={disabled} onClick={onClickHandler}>
+    <button
+      ref={ref}
+      className={classNames}
+      disabled={disabled}
+      onClick={onClickHandler}
+    >
       {children}
     </button>
   );

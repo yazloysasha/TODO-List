@@ -36,7 +36,7 @@
     border-radius: inherit;
     height: 100%;
     width: 100%;
-    z-index: -1;
+    z-index: -2;
   }
 
   &:disabled,
@@ -45,16 +45,14 @@
   }
 }
 
+.custom {
+  @extend %button;
+}
+
 .primary {
   @extend %button;
 
   color: $white;
-
-  @media (hover: none) {
-    &:active {
-      background: $gradientHover;
-    }
-  }
 
   &::before {
     background: $gradientAccent;

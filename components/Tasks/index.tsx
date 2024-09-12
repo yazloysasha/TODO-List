@@ -6,7 +6,9 @@ import {
 } from "./types";
 import { onDragEnd } from "./utils";
 import style from "./style.module.scss";
+import Button from "@components/Button";
 import { StatusClassName } from "./consts";
+import { ButtonType } from "@components/Button/types";
 import { ReactNode, useEffect, useState } from "react";
 import { StatusTitle } from "@components/TODOList/consts";
 import { ITask, Status } from "@components/TODOList/types";
@@ -67,18 +69,23 @@ export default function Tasks({
           </div>
 
           <div className={style.buttons}>
-            <button
+            <Button
               className={`${style.changeStatus} ${
                 style[StatusClassName[task.status]]
               }`}
+              type={ButtonType.CUSTOM}
               onClick={() => onChangeTaskStatus(key)}
             >
               <div className={style.icon} />
-            </button>
+            </Button>
 
-            <button className={style.delete} onClick={() => onDeleteTask(key)}>
+            <Button
+              className={style.delete}
+              type={ButtonType.CUSTOM}
+              onClick={() => onDeleteTask(key)}
+            >
               <div className={style.icon} />
-            </button>
+            </Button>
           </div>
         </li>
       )}
