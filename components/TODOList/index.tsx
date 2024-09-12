@@ -29,6 +29,23 @@ export default function TODOList(): ReactNode {
   // Ссылка для скачивания файлов
   const [link, setLink] = useState<HTMLAnchorElement | undefined>();
 
+  // Отслеживать скачивание приложения
+  const onDownloadApp = (type: "android") => {
+    if (!link) return;
+
+    let name: string;
+
+    switch (type) {
+      case "android":
+        name = "TODO-List.apk";
+        break;
+    }
+
+    link.href = name;
+    link.download = name;
+    link.click();
+  };
+
   // Отслеживать добавление файлов
   const onUploadFile = (file: File): void => {
     const fileReader = new FileReader();
@@ -71,6 +88,7 @@ export default function TODOList(): ReactNode {
           if (!link) return;
 
           link.href = url;
+          link.download = FILENAME;
           link.click();
           break;
         case "android":
@@ -155,16 +173,27 @@ export default function TODOList(): ReactNode {
 
     const newLink = document.createElement("a");
 
-    newLink.download = FILENAME;
-
     setLink(newLink);
   }, []);
 
   return (
     <div className={style.todoList}>
-      <h2 className={style.title}>Список задач</h2>
-
       <div className={style.todoHead}>
+        <div className={style.titleContainer}>
+          <h2 className={style.title}>Список задач</h2>
+
+          {DEVICE === "web" && (
+            <Button
+              className={style.distribution}
+              type={ButtonType.SOFT}
+              onClick={() => onDownloadApp("android")}
+            >
+              <div className={style.android} />
+              Android
+            </Button>
+          )}
+        </div>
+
         <div className={style.headContainer}>
           {Object.values(Status).map((status, key) => (
             <span key={key} className={style.info}>

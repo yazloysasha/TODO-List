@@ -15,6 +15,27 @@
     flex-direction: column;
     width: 100%;
 
+    .titleContainer {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .distribution {
+        margin-left: 10px;
+        padding: 0 10px;
+        border-radius: 8px;
+        height: 32px;
+        font-size: 14px;
+        font-weight: 500;
+
+        .android {
+          @include icon("android", $white, 16px);
+
+          margin-right: 5px;
+        }
+      }
+    }
+
     .headContainer {
       display: flex;
       flex-direction: row;
