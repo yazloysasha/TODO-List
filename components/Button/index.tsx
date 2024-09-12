@@ -58,8 +58,6 @@ export default function Button({
   const onClickHandler: MouseEventHandler<
     HTMLButtonElement | HTMLLabelElement
   > = (event) => {
-    if (onClick) onClick(event);
-
     if (DEVICE === "android") {
       createRippleEffect(
         event.target as HTMLButtonElement | HTMLLabelElement,
@@ -67,6 +65,8 @@ export default function Button({
         event.clientY
       );
     }
+
+    if (onClick) onClick(event);
   };
 
   return input ? (
