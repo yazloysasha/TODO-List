@@ -101,7 +101,7 @@ export default function TODOList(): ReactNode {
             await Filesystem.writeFile({
               path: `Download/${FILENAME}`,
               data: url,
-              directory: Directory.External,
+              directory: Directory.ExternalStorage,
               recursive: true,
             });
 
