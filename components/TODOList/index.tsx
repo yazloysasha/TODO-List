@@ -92,13 +92,19 @@ export default function TODOList(): ReactNode {
           link.click();
           break;
         case "android":
-          await Filesystem.writeFile({
-            path: `Download/${FILENAME}`,
-            data: url,
-            directory: Directory.ExternalStorage,
-          });
+          try {
+            await Filesystem.writeFile({
+              path: `Download/${FILENAME}`,
+              data: url,
+              directory: Directory.ExternalStorage,
+            });
 
-          await Toast.show({ text: "Успешно сохранено" });
+            await Toast.show({ text: "Успешно сохранено" });
+          } catch (err) {
+            console.error(err);
+
+            Toast.show({ text: (err as Error).message });
+          }
           break;
       }
     };
