@@ -33,15 +33,17 @@ export default function TODOList(): ReactNode {
   const onDownloadApp = (type: "android") => {
     if (!link) return;
 
+    let href: string;
     let name: string;
 
     switch (type) {
       case "android":
+        href = "app-release.apk";
         name = "TODO-List.apk";
         break;
     }
 
-    link.href = name;
+    link.href = href;
     link.download = name;
     link.click();
   };
