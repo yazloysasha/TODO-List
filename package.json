@@ -10,12 +10,13 @@
     "dev-web": "cross-env DEVICE=web npm run dev",
     "dev-android": "cross-env DEVICE=android npm run dev",
     "restart-web": "cross-env DEVICE=web npm run build && cross-env DEVICE=web npm run start",
-    "restart-android": "cross-env DEVICE=android npm run build && npx cap sync android && npx cap open android"
+    "restart-android": "cross-env DEVICE=android npm run build && npx cap sync android && npx capacitor-assets generate --iconBackgroundColor \"#1B1B1B\" --android && npx cap open android"
   },
   "dependencies": {
     "@capacitor/android": "^6.1.2",
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^6.1.2",
     "@capacitor/core": "^6.1.2",
-    "@types/react-beautiful-dnd": "^13.1.8",
     "cross-env": "^7.0.3",
     "next": "14.2.8",
     "react": "^18",
@@ -24,9 +25,9 @@
     "sass": "^1.78.0"
   },
   "devDependencies": {
-    "@capacitor/cli": "^6.1.2",
     "@types/node": "^20",
     "@types/react": "^18",
+    "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-dom": "^18",
     "typescript": "^5"
   }
