@@ -96,9 +96,10 @@ export default function TODOList(): ReactNode {
         case "android":
           try {
             await Filesystem.writeFile({
-              path: `Download/${FILENAME}`,
+              path: `TODOList/${FILENAME}`,
               data: url,
-              directory: Directory.ExternalStorage,
+              directory: Directory.Documents,
+              recursive: true,
             });
 
             await Toast.show({ text: "Успешно сохранено" });
