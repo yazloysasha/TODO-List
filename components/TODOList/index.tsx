@@ -261,6 +261,8 @@ export default function TODOList(): ReactNode {
   useEffect(() => {
     if (!tasksToReplace) return;
 
+    tasksToReplace.reverse();
+
     replaceTasksExecute();
   }, [tasksToReplace]);
 
