@@ -1,15 +1,16 @@
-import { IConfig } from "@types";
+import { fetcher } from "@utils";
 import getConfig from "next/config";
 import Tasks from "@components/Tasks";
 import style from "./style.module.scss";
 import Button from "@components/Button";
 import Search from "@components/Search";
-import { ITask, Status } from "./types";
 import { Toast } from "@capacitor/toast";
 import Dropdown from "@components/Dropdown";
+import { IData, ITask, Status } from "./types";
 import { FILENAME, StatusTitle } from "./consts";
 import { ButtonType } from "@components/Button/types";
 import { ReactNode, useEffect, useState } from "react";
+import { ExecuteWithErrorHandling, IConfig } from "@types";
 import { StatusClassName } from "@components/Tasks/consts";
 import { Directory, Filesystem } from "@capacitor/filesystem";
 import { getCountOfTasksByStatuses, getRegExpQuery } from "./utils";
@@ -28,6 +29,68 @@ export default function TODOList(): ReactNode {
 
   // Ссылка для скачивания файлов
   const [link, setLink] = useState<HTMLAnchorElement | undefined>();
+
+  // ID удаляющейся задачи
+  const [deletableTaskId, setDeletableTaskId] = useState<string>();
+
+  // ID редактирующейся задачи
+  const [editableTaskId, setEditableTaskId] = useState<string>();
+
+  // Поля редактирующейся задачи
+  const [editableTaskData, setEditableTaskData] = useState<Partial<ITask>>({});
+
+  // Список задач для замены
+  const [tasksToReplace, setTasksToReplace] = useState<ITask[]>();
+
+  // Получить список задач
+  const [{ data: getTasksData }, getTasksExecute]: [
+    { data: IData },
+    ExecuteWithErrorHandling
+  ] = fetcher({
+    method: "GET",
+    url: "/tasks",
+  });
+
+  // Создать новую задачу
+  const [{ data: createTaskData }, createTaskExecute]: [
+    { data: { task: ITask } },
+    ExecuteWithErrorHandling
+  ] = fetcher({
+    method: "POST",
+    url: "/tasks",
+    data: {
+      content: "",
+      status: Status.NOT_DONE,
+    },
+  });
+
+  // Заменить список задач
+  const [{ data: replaceTasksData }, replaceTasksExecute] = fetcher({
+    method: "PUT",
+    url: "/tasks",
+    data: {
+      tasks: tasksToReplace,
+    },
+  });
+
+  // Отредактировать задачу
+  const [{ data: editTaskData }, editTaskExecute]: [
+    { data: { task: ITask } },
+    ExecuteWithErrorHandling
+  ] = fetcher({
+    method: "PATCH",
+    url: `/tasks/${editableTaskId}`,
+    data: editableTaskData,
+  });
+
+  // Удалить задачу
+  const [{ data: deleteTaskData }, deleteTaskExecute]: [
+    { data: { taskId: string } },
+    ExecuteWithErrorHandling
+  ] = fetcher({
+    method: "DELETE",
+    url: `/tasks/${deletableTaskId}`,
+  });
 
   // Отслеживать скачивание приложения
   const onDownloadApp = (type: "android") => {
@@ -67,7 +130,7 @@ export default function TODOList(): ReactNode {
             return;
         }
 
-        setTasks(data as ITask[]);
+        setTasksToReplace(data as ITask[]);
       } catch (err) {
         console.error(err);
       }
@@ -118,14 +181,7 @@ export default function TODOList(): ReactNode {
 
   // Отслеживать добавление задачи
   const onAddTask = (): void => {
-    const newTask: ITask = {
-      content: "",
-      status: Status.NOT_DONE,
-    };
-
-    const newTasks: ITask[] = [newTask, ...tasks];
-
-    setTasks(newTasks);
+    createTaskExecute();
   };
 
   // Отслеживать перемещение задачи
@@ -145,30 +201,41 @@ export default function TODOList(): ReactNode {
     newTasks[key].content = content;
 
     setTasks(newTasks);
+
+    setTimeout(() => {
+      setTasks((tasks) => {
+        const currentTask = tasks.find(
+          (task) => task._id === newTasks[key]._id
+        );
+
+        if (content === currentTask?.content) {
+          setEditableTaskId(currentTask._id);
+          setEditableTaskData({ content });
+        }
+
+        return tasks;
+      });
+    }, 300);
   };
 
   // Отслеживать изменение статуса задачи
   const onChangeTaskStatus = (key: number): void => {
-    const newTasks: ITask[] = [...tasks];
+    setEditableTaskId(tasks[key]._id);
 
     switch (tasks[key].status) {
       case Status.DONE:
-        newTasks[key].status = Status.NOT_DONE;
+        setEditableTaskData({ status: Status.NOT_DONE });
         break;
 
       case Status.NOT_DONE:
-        newTasks[key].status = Status.DONE;
+        setEditableTaskData({ status: Status.DONE });
         break;
     }
-
-    setTasks(newTasks);
   };
 
   // Отслеживать удаление задач
   const onDeleteTask = (key: number): void => {
-    const newTasks: ITask[] = tasks.filter((_, taskKey) => taskKey !== key);
-
-    setTasks(newTasks);
+    setDeletableTaskId(tasks[key]._id);
   };
 
   // Количество задач по статусам
@@ -179,14 +246,85 @@ export default function TODOList(): ReactNode {
     (task) => query.test(task.content) && (!status || status === task.status)
   );
 
-  // Создать ссылку для скачивания файла
   useEffect(() => {
+    getTasksExecute();
+
     if (DEVICE !== "web") return;
 
+    // Создать ссылку для скачивания файла
     const newLink = document.createElement("a");
 
     setLink(newLink);
   }, []);
+
+  // Заменить задачи
+  useEffect(() => {
+    if (!tasksToReplace) return;
+
+    replaceTasksExecute();
+  }, [tasksToReplace]);
+
+  // Отредактировать задачу
+  useEffect(() => {
+    if (!editableTaskId || !editableTaskData) return;
+
+    editTaskExecute();
+  }, [editableTaskData]);
+
+  // Удалить задачу
+  useEffect(() => {
+    if (!deletableTaskId) return;
+
+    deleteTaskExecute();
+  }, [deletableTaskId]);
+
+  useEffect(() => {
+    if (!getTasksData) return;
+
+    getTasksData.items.reverse();
+
+    setTasks(getTasksData.items);
+  }, [getTasksData]);
+
+  useEffect(() => {
+    if (!createTaskData) return;
+
+    const newTasks: ITask[] = [createTaskData.task, ...tasks];
+
+    setTasks(newTasks);
+  }, [createTaskData]);
+
+  useEffect(() => {
+    if (!replaceTasksData) return;
+
+    getTasksExecute();
+  }, [replaceTasksData]);
+
+  useEffect(() => {
+    if (!editTaskData) return;
+
+    const newTasks: ITask[] = [...tasks];
+
+    const key = newTasks.findIndex(
+      (task) => editTaskData.task._id === task._id
+    );
+
+    if (key === -1) return;
+
+    newTasks[key].status = editTaskData.task.status;
+
+    setTasks(newTasks);
+  }, [editTaskData]);
+
+  useEffect(() => {
+    if (!deleteTaskData) return;
+
+    const newTasks: ITask[] = tasks.filter(
+      (task) => deleteTaskData.taskId !== task._id
+    );
+
+    setTasks(newTasks);
+  }, [deleteTaskData]);
 
   return (
     <div className={style.todoList}>
