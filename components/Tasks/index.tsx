@@ -38,71 +38,74 @@ export default function Tasks({
 
   // Получить задачу
   const getTaskElement = (task: ITask, key: number): ReactNode => (
-    <Draggable key={key} draggableId={String(key)} index={key}>
-      {(provided) => (
-        <li
-          className={`${style.task} ${isGrabbing && style.grabbing} ${
-            isAnimate && style.animate
+    // <Draggable key={key} draggableId={String(key)} index={key}>
+    //   {(provided) => (
+    <li
+      className={`${style.task} ${isGrabbing && style.grabbing} ${
+        isAnimate && style.animate
+      }`}
+      // ref={provided.innerRef}
+      // {...provided.draggableProps}
+      // {...provided.dragHandleProps}
+    >
+      <div className={style.number}>
+        <p>{key + 1}</p>
+      </div>
+
+      <div className={style.status}>
+        <div className={style[StatusClassName[task.status]]}>
+          {StatusTitle[task.status]}
+        </div>
+      </div>
+
+      <div className={style.content}>
+        <textarea
+          value={task.content}
+          disabled={task.status === Status.DONE}
+          onChange={(event) => onChangeTaskContent(key, event.target.value)}
+        />
+      </div>
+
+      <div className={style.buttons}>
+        <Button
+          className={`${style.changeStatus} ${
+            style[StatusClassName[task.status]]
           }`}
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
+          type={ButtonType.CUSTOM}
+          onClick={() => onChangeTaskStatus(key)}
         >
-          <div className={style.number}>
-            <p>{key + 1}</p>
-          </div>
+          <div className={style.icon} />
+        </Button>
 
-          <div className={style.status}>
-            <div className={style[StatusClassName[task.status]]}>
-              {StatusTitle[task.status]}
-            </div>
-          </div>
-
-          <div className={style.content}>
-            <textarea
-              value={task.content}
-              disabled={task.status === Status.DONE}
-              onChange={(event) => onChangeTaskContent(key, event.target.value)}
-            />
-          </div>
-
-          <div className={style.buttons}>
-            <Button
-              className={`${style.changeStatus} ${
-                style[StatusClassName[task.status]]
-              }`}
-              type={ButtonType.CUSTOM}
-              onClick={() => onChangeTaskStatus(key)}
-            >
-              <div className={style.icon} />
-            </Button>
-
-            <Button
-              className={style.delete}
-              type={ButtonType.CUSTOM}
-              onClick={() => onDeleteTask(key)}
-            >
-              <div className={style.icon} />
-            </Button>
-          </div>
-        </li>
-      )}
-    </Draggable>
+        <Button
+          className={style.delete}
+          type={ButtonType.CUSTOM}
+          onClick={() => onDeleteTask(key)}
+        >
+          <div className={style.icon} />
+        </Button>
+      </div>
+    </li>
+    //   )}
+    // </Draggable>
   );
 
   // Получить задачи
   const getTasksElement = (): ReactNode => (
-    <Droppable droppableId="tasks" direction="vertical">
-      {(provided) => (
-        <ul
-          className={`${style.tasks} ${isGrabbing && style.grabbing}`}
-          ref={provided.innerRef}
-          {...provided.droppableProps}
-        >
-          {tasks.map(getTaskElement)}
-        </ul>
-      )}
-    </Droppable>
+    // <Droppable droppableId="tasks" direction="vertical">
+    //   {(provided) => (
+    //     <ul
+    //       className={`${style.tasks} ${isGrabbing && style.grabbing}`}
+    //       ref={provided.innerRef}
+    //       {...provided.droppableProps}
+    //     >
+    //       {tasks.map(getTaskElement)}
+    //     </ul>
+    //   )}
+    // </Droppable>
+    <ul className={`${style.tasks} ${isGrabbing && style.grabbing}`}>
+      {tasks.map(getTaskElement)}
+    </ul>
   );
 
   useEffect(() => setIsClientSide(true), []);
@@ -137,15 +140,16 @@ export default function Tasks({
       </div>
 
       {isClientSide && tasks.length ? (
-        <DragDropContext
-          onDragStart={() => setIsGrabbing(true)}
-          onDragEnd={(result) => {
-            setIsGrabbing(false);
-            onDragEnd(result, onMoveTask);
-          }}
-        >
-          {getTasksElement()}
-        </DragDropContext>
+        // <DragDropContext
+        //   onDragStart={() => setIsGrabbing(true)}
+        //   onDragEnd={(result) => {
+        //     setIsGrabbing(false);
+        //     onDragEnd(result, onMoveTask);
+        //   }}
+        // >
+        //   {getTasksElement()}
+        // </DragDropContext>
+        getTasksElement()
       ) : (
         <span className={style.nothing}>Упс! Ничего не найдено...</span>
       )}
