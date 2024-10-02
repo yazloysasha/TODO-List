@@ -344,6 +344,16 @@ export default function TODOList(): ReactNode {
               Android
             </Button>
           )}
+
+          {DEVICE === "android" && (
+            <Button
+              className={style.distribution}
+              type={ButtonType.SOFT}
+              onClick={() => getTasksExecute()}
+            >
+              Обновить
+            </Button>
+          )}
         </div>
 
         <div className={style.headContainer}>
