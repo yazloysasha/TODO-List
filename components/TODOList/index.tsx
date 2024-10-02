@@ -130,6 +130,8 @@ export default function TODOList(): ReactNode {
             return;
         }
 
+        data.reverse();
+
         setTasksToReplace(data as ITask[]);
       } catch (err) {
         console.error(err);
@@ -260,8 +262,6 @@ export default function TODOList(): ReactNode {
   // Заменить задачи
   useEffect(() => {
     if (!tasksToReplace) return;
-
-    tasksToReplace.reverse();
 
     replaceTasksExecute();
   }, [tasksToReplace]);
